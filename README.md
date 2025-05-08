@@ -1,0 +1,5 @@
+Create a virtual environment 
+Activate environment
+Install all the required libraries
+Get API keys from Acu weather site
+use API keys where needed
