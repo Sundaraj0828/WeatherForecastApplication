@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Past 6 Hours weather Forecast</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+        <script src="https://kit.fontawesome.com/b0cd73bf15.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="../static/css/master.css">
+        <style>
+            body{
+                background: url('../static/image/bg.jpg');
+                background-position: center;
+                background-attachment: fixed;
+                background-size: cover;
+            }
+        </style>
+    </head>
+    <body id="past_6">
+        <div class="container-fluid top text-white text-center mb-4">
+            <div class="row ">
+                <div class="col-1 text-start py-3">
+                    <a href="{{url_for('home')}}" class="justify-content-start">
+                        <i class="fa-solid fa-house ms-0 fa-2xl"></i>
+                    </a>
+                </div>
+                <div class="col-9 text-center pt-4 pb-0">
+                    <h4 class="card-title mb-4">PAST 6 HOUR WEATHER FORECAST 🌤️</h4>
+                </div>
+                <div class="col-2 text-center py-2">
+                    <h6><i class="fa-solid fa-calendar-day"></i> {{c_date[0]}} </h6>
+                    <h5 ><i class="fa-solid fa-clock"></i> <span id="txt" class=" text-info"></span></h5>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid ">
+            <div class="row" id="weather_6_boxes">
+                {% for i in p_data %}
+                {% set hours = i['LocalObservationDateTime'].split('T') %}
+                {% set hrs = hours[1].split(':') %}
+                {% if hrs[0]|int > 12 %}
+                    {% set h = hrs[0]|int - 12 %}
+                    {% set hr = h|string +':' + hrs[1]|string + ' PM' %}
+                {% else %}
+                    {% set hr = hrs[0] +':'+hrs[1] + ' AM' %}
+                {% endif  %}
+                <div class="col-6 mb-2">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <div class="row">
+                                    <div class="col-7 d-flex justify-content-start">
+                                        <p class="pt-3 pe-4">Weather condition in :</p> <h6 class="display-6">{{hr}} </h6>
+                                    </div>
+                                    <div class="col-5 text-end ">
+                                        <span class="badge bg-dark text-warning">{{i['WeatherText']}}</span>
+                                    </div>
+                                </div>
+                            </h5>
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="card bg-dark text-light">
+                                        <div class="card-body text-center">
+                                            <h5>Temperature <i class="fa-solid fa-temperature-low"></i> <br>
+                                                <span class="display-6">{{i['Temperature']['Metric']['Value']}}&#xb0;C</span>
+                                            </h5>
+                                            <small>Real feel : {{i['RealFeelTemperature']['Metric']['Value']}}&#xb0;C</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="card bg-dark text-light">
+                                        <div class="card-body text-center">
+                                            <h5>Humidity <i class="fa-solid fa-droplet"></i> <br>
+                                                <span class="display-6">{{i['RelativeHumidity']}}&#xb0;C</span>
+                                            </h5>
+                                            <small>Indoor Humidity : {{i['IndoorRelativeHumidity']}}&#xb0;C</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="card bg-dark text-light">
+                                        <div class="card-body text-center">
+                                            <h5>UV Index <i class="fa-regular fa-sun"></i> <br>
+                                                <span class="display-6">{{i['UVIndex']}}</span>
+                                            </h5>
+                                            <small>{{i['UVIndexText']}}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" id="other_features">
+                                <div class="col-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5>Dew Point</h5>
+                                            Dew Point Temperature : {{i['DewPoint']['Metric']['Value']}}&#xb0;C <br>
+                                            <h5 class="mt-3">Visibility</h5>
+                                            Visibility : {{i['Visibility']['Metric']['Value']}} {{i['Visibility']['Metric']['Unit']}} <br>
+                                            <h5 class="mt-3">Clouds at Sky</h5>
+                                            Covered by clouds : {{i['CloudCover']}} %
+                                        </div>
+                                    </div>                                    
+                                </div>
+                                <div class="col-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5>Wind</h5>
+                                            Direction : {{i['Wind']['Direction']['Degrees']}} {{i['Wind']['Direction']['Localized']}} <br>
+                                            Speed : {{i['Wind']['Speed']['Metric']['Value']}} {{i['Wind']['Speed']['Metric']['Unit']}}<br>
+                                            <h5 class="mt-3">Atmospheric Pressure</h5>
+                                            Pressure : {{i['Pressure']['Metric']['Value']}}
+                                        </div>
+                                    </div>                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        </div>   
+        <div class="container-fluid bg-dark text-light">
+            <div class="row">
+                <div class="col-12">
+                    <footer class="d-flex flex-wrap justify-content-between align-items-center mb-4 mt-4">
+                        <p class="col-md-4 mb-0 text-muted">© 2025 Weather Forecast | 
+                            <a href="{{url_for('important_info')}}" class="text-decoration-none" target="_blank">Important info</a>
+                        </p>
+                        <ul class="nav col-md-4 justify-content-end">
+                        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Developed By :</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Ajay</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Arundhati</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Kareena</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Asish</a></li>
+                        </ul>
+                    </footer>
+                </div>
+            </div>
+        </div>
+        <script>
+            var span = document.getElementById('txt');
+            function time() {
+            var d = new Date();
+            var s = d.getSeconds();
+            var m = d.getMinutes();
+            var h = d.getHours();
+            span.textContent = 
+                ("0" + h).substr(-2) + ":" + ("0" + m).substr(-2) + ":" + ("0" + s).substr(-2);
+            }
+            setInterval(time, 1000);
+            </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    </body>
+</html>

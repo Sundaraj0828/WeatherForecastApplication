@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Weather Forecast</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+        <script src="https://kit.fontawesome.com/b0cd73bf15.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="../static/css/master.css">
+
+        {% if session %}
+            <!-- location info -->
+            {% set city_name = session['city_info'][0]['LocalizedName'] %}
+            {% set country = session['city_info'][0]['Country']['LocalizedName'] %}
+            {% set state = session['city_info'][0]['AdministrativeArea']['LocalizedName'] %}
+            {% set latitude = session['city_info'][0]['GeoPosition']['Latitude']  %}
+            {% set longitude = session['city_info'][0]['GeoPosition']['Longitude'] %} 
+            <!-- temperature details info -->
+            {% set temperature = session['weather_info'][0]['Temperature']['Metric']['Value'] %}
+            {% set weather_desc = session['weather_info'][0]['WeatherText'] %}
+            {% set real_feel = session['weather_info'][0]['RealFeelTemperature']['Metric']['Value'] %}
+            {% set real_feel_phrase = session['weather_info'][0]['RealFeelTemperature']['Metric']['Phrase'] %}
+            {% set humidity = session['weather_info'][0]['RelativeHumidity'] %}
+            {% set indoor_humidity = session['weather_info'][0]['IndoorRelativeHumidity'] %}
+            {% set w_icon = session['weather_info'][0]['WeatherIcon'] %}
+            {% set p_summary = session['weather_info'][0]['PrecipitationSummary']['Precipitation']['Metric']['Value'] %}
+            {% set p_unit = session['weather_info'][0]['PrecipitationSummary']['Precipitation']['Metric']['Unit'] %}
+            {% set wind = session['weather_info'][0]['Wind']['Speed']['Metric']['Value'] %}
+            {% set wind_u = session['weather_info'][0]['Wind']['Speed']['Metric']['Unit'] %}
+            {% set uv_index = session['weather_info'][0]['UVIndex'] %}
+            {% set uv_index_text =  session['weather_info'][0]['UVIndexText'] %}
+            {% set cloud_cover =  session['weather_info'][0]['CloudCover'] %}
+            {% set pressure =  session['weather_info'][0]['Pressure']['Metric']['Value'] %}
+            {% set pressure_unit =  session['weather_info'][0]['Pressure']['Metric']['Unit'] %}
+            {% set pressure_tendency =  session['weather_info'][0]['PressureTendency']['LocalizedText'] %}
+            {% set pt_code =  session['weather_info'][0]['PressureTendency']['Code'] %}
+            <!-- 1day daily forecast -->
+            {% set hrs_sun = session['day1_daily_forecast']['DailyForecasts'][0]['HoursOfSun'] %}
+            {% set min = session['day1_daily_forecast']['DailyForecasts'][0]['Temperature']['Minimum']['Value'] %}
+            {% set max = session['day1_daily_forecast']['DailyForecasts'][0]['Temperature']['Maximum']['Value'] %}
+            {% set sunrise = session['day1_daily_forecast']['DailyForecasts'][0]['Sun']['Rise'].split('T') %}
+            {% set sunset = session['day1_daily_forecast']['DailyForecasts'][0]['Sun']['Set'].split('T') %}
+            {% set aqi =  session['day1_daily_forecast']['DailyForecasts'][0]['AirAndPollen'][0]['Value'] %}
+            {% set aqi_cat =  session['day1_daily_forecast']['DailyForecasts'][0]['AirAndPollen'][0]['Category'] %}
+            {% set precipitation = session['day1_daily_forecast']['DailyForecasts'][0]['Day']['HasPrecipitation'] %}
+            {% set p_type = session['day1_daily_forecast']['DailyForecasts'][0]['Day']['PrecipitationType'] %}
+            {% set p_intensity = session['day1_daily_forecast']['DailyForecasts'][0]['Day']['PrecipitationIntensity'] %}
+            {% set w_phrase = session['day1_daily_forecast']['DailyForecasts'][0]['Day']['LongPhrase'] %}
+            {% set p_probability = session['day1_daily_forecast']['DailyForecasts'][0]['Day']['PrecipitationProbability'] %}
+            {% set t_probability = session['day1_daily_forecast']['DailyForecasts'][0]['Day']['ThunderstormProbability'] %}
+            {% set r_probability = session['day1_daily_forecast']['DailyForecasts'][0]['Day']['RainProbability'] %}
+            {% set s_probability = session['day1_daily_forecast']['DailyForecasts'][0]['Day']['SnowProbability'] %}
+            {% set i_Probability = session['day1_daily_forecast']['DailyForecasts'][0]['Day']['IceProbability'] %}
+            {% set day_phrase = session['day1_daily_forecast']['DailyForecasts'][0]['Day']['IconPhrase'] %}
+            {% if p_type == 'Rain' %}
+                {% set rain = session['day1_daily_forecast']['DailyForecasts'][0]['Day']['Rain']['Value'] %}
+                {% set rain_unit = session['day1_daily_forecast']['DailyForecasts'][0]['Day']['Rain']['Unit'] %}
+            {% endif %}
+            {% set wind_degree = session['day1_daily_forecast']['DailyForecasts'][0]['Day']['Wind']['Direction']['Degrees'] %}
+            {% set wind_dir = session['day1_daily_forecast']['DailyForecasts'][0]['Day']['Wind']['Direction']['Localized'] %}
+            {% set wind_speed = session['day1_daily_forecast']['DailyForecasts'][0]['Day']['Wind']['Speed']['Value'] %}
+            {% set wind_speed_unit = session['day1_daily_forecast']['DailyForecasts'][0]['Day']['Wind']['Speed']['Unit'] %}
+            {% set icon_phrase_n = session['day1_daily_forecast']['DailyForecasts'][0]['Night']['IconPhrase'] %}
+            {% set precipitation_n = session['day1_daily_forecast']['DailyForecasts'][0]['Night']['HasPrecipitation'] %}
+            {% set w_phrase_n = session['day1_daily_forecast']['DailyForecasts'][0]['Night']['LongPhrase'] %}
+            {% set p_probability_n = session['day1_daily_forecast']['DailyForecasts'][0]['Night']['PrecipitationProbability'] %}
+            {% set t_probability_n = session['day1_daily_forecast']['DailyForecasts'][0]['Night']['ThunderstormProbability'] %}
+            {% set r_probability_n = session['day1_daily_forecast']['DailyForecasts'][0]['Night']['RainProbability'] %}
+            {% set s_probability_n = session['day1_daily_forecast']['DailyForecasts'][0]['Night']['SnowProbability'] %}
+            {% set i_Probability_n = session['day1_daily_forecast']['DailyForecasts'][0]['Night']['IceProbability'] %}            
+            {% if p_type_n == 'Rain' %}
+                {% set rain_n = session['day1_daily_forecast']['DailyForecasts'][0]['Night']['Rain']['Value'] %}
+                {% set rain_unit_n = session['day1_daily_forecast']['DailyForecasts'][0]['Night']['Rain']['Unit'] %}
+            {% endif %}
+            {% set wind_degree_n = session['day1_daily_forecast']['DailyForecasts'][0]['Night']['Wind']['Direction']['Degrees'] %}
+            {% set wind_dir_n = session['day1_daily_forecast']['DailyForecasts'][0]['Night']['Wind']['Direction']['Localized'] %}
+            {% set wind_speed_n = session['day1_daily_forecast']['DailyForecasts'][0]['Night']['Wind']['Speed']['Value'] %}
+            {% set wind_speed_unit_n = session['day1_daily_forecast']['DailyForecasts'][0]['Night']['Wind']['Speed']['Unit'] %}
+            {% set hrs_precipt = session['day1_daily_forecast']['DailyForecasts'][0]['Day']['HoursOfPrecipitation'] %}
+            <!-- next 12 hr forecast -->
+            {% set next12hr = session['next_12hr_forecast'] %}       
+        <style>
+            body{
+                background-image: url('../static/image/bg3.jpg');
+                background-position: center center;
+                background-size: cover;
+                background-attachment:fixed ;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container-fluid top text-white text-center mb-4">
+            <div class="row ">
+                <div class="col-1 text-start py-3">
+                    <a href="{{url_for('home')}}" class="justify-content-start">
+                        <i class="fa-solid fa-house ms-0 fa-2xl"></i>
+                    </a>
+                </div>
+                <div class="col-9 text-center pt-4 pb-0">
+                    <h4 class="card-title mb-4">Current Weather 🌤️</h4>
+                </div>
+                <div class="col-2 text-center py-2">
+                    <h6><i class="fa-solid fa-calendar-day"></i> {{c_date[0]}} </h6>
+                    <h5 ><i class="fa-solid fa-clock"></i> <span id="txt" class=" text-info"></span></h5>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row mb-4">                
+                <div class="col-9">
+                    <div class="row">                         
+                        <div class="col-6">
+                            <div class="card " id="weather_box">                                
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-12 text-center ">
+                                            <span class="display-6 mt-3 text-warning">{{city_name | upper}}</span><br>
+                                            <h5 class=" mt-3">{{state}}, {{country}}</h5>
+                                            <h4 class="badge pill-rounded bg-secondary text-light">{{latitude}}, {{longitude}}</h4> 
+                                        </div>                                        
+                                        <div class="col-12 text-center mt-3">                                             
+                                            <h2 class="text-warning mt-0 py-0"><i class="fas fa-thermometer-half"></i>&nbsp;&nbsp;<span class="display-3 "><strong>{{temperature}}</strong></span>&#xb0;C</h2>
+                                            <h6>Feels Like : {{real_feel}}&#xb0;C ({{real_feel_phrase}})</h6>
+                                            {% if precipitation == True %}
+                                                {{p_type}} : {{p_summary}} {{p_unit}}
+                                            {% endif %}
+                                            <h6>{{weather_desc}}</h6>                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="row" id="weather_info">
+                                <div class="col-6">
+                                    <div class="card mb-4">
+                                        <i class="fa-solid fa-temperature-arrow-down fa-xl"></i>
+                                        <h6 class='mt-4'>Min Temp.<br>
+                                            <span class="display-6 ">{{min}}&#xb0;C</span>
+                                        </h6>
+                                        <p class='text-lg'></p>    
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="card mb-4">
+                                        <i class="fa-solid fa-temperature-arrow-up fa-xl"></i>
+                                        <h6 class='mt-4'>Max Temp.<br>
+                                            <span class="display-6 ">{{max}}&#xb0;C</span>
+                                        </h6>
+                                        <p class='text-lg'></p>    
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="card ">
+                                        <i class="fa-solid fa-water fa-xl"></i>
+                                        <h6 class='mt-4'>Humidity<br>
+                                            <span class="display-6 ">{{humidity}}%</span>
+                                        </h6>
+                                        <p class='text-lg'></p>    
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="card ">
+                                        <i class="fa-solid fa-wind fa-xl"></i>
+                                        <h6 class='mt-4'>Wind <br>
+                                            <span class="display-6">{{wind}}</span><small>{{wind_u}} </small>
+                                        </h6>
+                                        <p class='text-lg'></p>    
+                                    </div>
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <div class="card dark_t_bg mb-4 card_rounded">
+                                <div class="card-body d-flex justify-content-between">
+                                    <h6 class="me-4 bg-dark py-2 px-3 card_rounded ">
+                                        AQ Index - <span >{{aqi}}</span> 
+                                        <span class="badge rounded-pill {% if aqi >= 6 %} bg-danger {% elif aqi >= 3 %} bg-warning text-dark {% else %} bg-success {% endif %}">{{aqi_cat}}</span>
+                                    </h6>
+                                    <h6 class="me-4 bg-dark py-2 px-3 card_rounded ">
+                                        UV Index - <span >{{uv_index}} </span> 
+                                        <span class="badge rounded-pill {% if uv_index >= 6 %} bg-danger {% elif uv_index >=3 %} bg-warning text-dark {% else %} bg-success {% endif %}  ">{{uv_index_text}}</span><br>
+                                        
+                                    </h6>
+                                    <h6 class="me-4 bg-dark py-2 px-3 card_rounded ">
+                                        Hours of Precipitation - <span>{{hrs_precipt}} Hrs.</span>
+                                    </h6>
+                                    <h6 class="bg-dark py-2 px-3 card_rounded ">
+                                        Atmospheric Pressure - 
+                                        <span>{{pressure}} {{pressure_unit}}  
+                                            <span class="badge rounded-pill {% if pt_code == 'F' %} bg-danger {% elif pt_code == 'S' %} bg-success {% elif pt_code == 'R' %} bg-info text-dark {% endif %}">{{pressure_tendency}}</span>
+                                        </span>
+                                    </h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                    
+                    <div class="row " id="rise_set">
+                        <div class="col-6 ">
+                            <div class="card">
+                                <div class="card-body d-flex justify-content-around">
+                                    <img src="../static/image/sunrise.png" alt="" class="img-fluid">
+                                    <div id="rise">
+                                        <h4> <span class="badge bg-warning text-dark">Sunrise</span></h4>
+                                        <h2>{{sunrise[1]}}</h2>
+                                    </div>
+                                </div>
+                            </div>                            
+                        </div>
+                        <div class="col-6">
+                            <div class="card">
+                                <div class="card-body d-flex justify-content-around">
+                                    <img src="../static/image/sunset.png" alt="" class="img-fluid">
+                                    <div id="set">
+                                        <h4> <span class="badge bg-dark text-warning">Sunset</span></h4>
+                                        <h2>{{sunset[1]}}</h2>
+                                    </div>
+                                </div>
+                            </div>                            
+                        </div>
+                    </div>
+                    <div class="row mt-4 text-center" id="next_12hr">
+                        <div class="col-12">
+                            <div class="card ">
+                                <h4 class="card-title text-warning p-2">Next 12 HR Forecast</h4>
+                                <div class="row mx-2 mb-3">
+                                    {% for i in next12hr %}
+                                        {% set dt = i['DateTime'].split('T') %}
+                                        {% set date = dt[0] %}
+                                        {% set t = dt[1].split('+') %}
+                                        {% set time = t[0][:5] %}
+                                        {% if time < "12:00" %}
+                                            {% set n_time = time+' AM' %}
+                                        {% elif time == "12:00" %}
+                                            {% set n_time = time +' PM' %}
+                                        {% else %}
+                                            {% set t = time[:2]|int - 12 %}
+                                            {% set n_time = t|string +':00 PM' %}
+                                        {% endif %}
+                                        <div class="col-2 mb-4">
+                                            <div class="card bg-info text-dark">
+                                                <div class="card-body text-start">
+                                                    <h6 class="badge bg-dark text-warning rounded-pill">{{n_time}}</h6>
+                                                    <h6><i class="fa-solid fa-temperature-full"></i> {{i['Temperature']['Value']}}&#xb0;C</h6>
+                                                    <h6><i class="fas fa-tint"></i> {{i['RelativeHumidity']}}</h6>
+                                                    <h6><i class="fa-solid fa-cloud-showers-heavy"></i> {{i['Rain']['Value']}} {{i['Rain']['Unit']}}</h6>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <ul class="nav nav-pills mb-3 border-bottom border-primary" id="pills-tab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                  <button class="nav-link active rounded-0 rounded-top" id="pills-day-tab" data-bs-toggle="pill" data-bs-target="#pills-day" type="button" role="tab" aria-controls="pills-day" aria-selected="true">Day</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                  <button class="nav-link rounded-0 rounded-top" id="pills-night-tab" data-bs-toggle="pill" data-bs-target="#pills-night" type="button" role="tab" aria-controls="pills-night" aria-selected="false">Night</button>
+                                </li>                                
+                              </ul>
+                              <div class="tab-content" id="pills-tabContent">
+                                <div class="tab-pane fade show active" id="pills-day" role="tabpanel" aria-labelledby="pills-day-tab">
+                                    <small class="text-muted"> {{day_phrase}}</small><br>
+                                    {% if precipitation == True %}
+                                        {% if p_type == 'Rain' %}
+                                            <h6>{{p_type}} : {{rain}} {{rain_unit}} ({{p_intensity}}) </h6>
+                                        {% elif p_type == 'Snow' %}
+                                            <h5>{{p_type}} : ({{p_intensity}}) </h5>
+                                            <h6>Snow Probability : {{s_probability}}</h6>
+                                        {% endif %}
+                                    {% endif %}
+                                    <small>Probability :</small>
+                                    <h6>Rain : {{r_probability}} %, <br>Thunderstorm : {{t_probability}} %</h6>
+                                    <small>Wind :</small>
+                                    <h6>Speed : {{wind_speed}} {{wind_speed_unit}}, <br>Direction : {{wind_degree}} {{wind_dir}} </h6>
+                                    <p class="text-primary">{{w_phrase | title}}</p>
+                                </div>
+                                <div class="tab-pane fade" id="pills-night" role="tabpanel" aria-labelledby="pills-night-tab">
+                                    <small class="text-muted"> {{icon_phrase_n}}</small><br>
+                                    {% if precipitation_n == True %}
+                                        {% if p_type_n == 'Rain' %}
+                                            <h6>{{p_type_n}} : {{rain_n}} {{rain_unit_n}} ({{p_intensity_n}}) </h6>
+                                        {% elif p_type_n == 'Snow' %}
+                                            <h5>{{p_type_n}} : ({{p_intensity_n}}) </h5>
+                                            <h6>Snow Probability : {{s_probability_n}}</h6>
+                                        {% endif %}
+                                    {% endif %}
+                                    <small>Probability :</small>
+                                    <h6>Rain : {{r_probability_n}} %, <br>Thainderstorm : {{t_probability_n}} %</h6>
+                                    <small>Wind :</small>
+                                    <h6>Speed : {{wind_speed_n}} {{wind_speed_unit_n}}, <br>Direction : {{wind_degree_n}} {{wind_dir_n}} </h6>
+                                    <p class="text-primary">{{w_phrase_n | title}}</p>
+                                </div>
+                              </div>
+                        </div>
+                    </div>
+                    <div id="n_city_weather">
+                        <div class="card bg-dark">
+                            <h4 class="card-header">10 Nearby City Weather</h4>
+                            <p class="text-muted px-3 pt-3">Check the weather conditions of neighbour cities of <strong>{{city_name | capitalize}}</strong></p>
+                            <div class="card-body px-4 pb-4">
+                                {% for i in session['neighbour_cities'][:10] %}
+                                <a href="/get_weather_n_city/{{i['city_name']}}" class="btn btn-outline-info mb-2">{{i['city_name']}}, {{i['state']}}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="card bg-secondary mt-4">
+                            <div class="row p-3">
+                                <div class="col-12 text-center d-flex flex-column">
+                                    <a href="{{url_for('past_6hr_condtion')}}" class="btn btn-info text-dark" target="_blank">
+                                        <h5>Past 6 Hours weather condition</h5>
+                                    </a>
+                                    <a href="{{url_for('next_5day_forecast')}}" class="btn btn-primary mt-3 text-light" target="_blank">
+                                        <h4>Forecast for next 4 Days</h4>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid bg-dark text-light">
+            <div class="row">
+                <div class="col-12">
+                    <footer class="d-flex flex-wrap justify-content-between align-items-center mb-4 mt-4">
+                        <p class="col-md-4 mb-0 text-muted">© 2025 Weather Forecast | 
+                            <a href="{{url_for('important_info')}}" class="text-decoration-none" target="_blank">Important info</a>
+                        </p>
+                        <ul class="nav col-md-4 justify-content-end">
+                        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Developed By :</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Ajay</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Arundhati</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Kareena</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Asish</a></li>
+                        </ul>
+                    </footer>
+                </div>
+            </div>
+        </div>        
+        <script>
+            var span = document.getElementById('txt');
+            function time() {
+            var d = new Date();
+            var s = d.getSeconds();
+            var m = d.getMinutes();
+            var h = d.getHours();
+            span.textContent = 
+                ("0" + h).substr(-2) + ":" + ("0" + m).substr(-2) + ":" + ("0" + s).substr(-2);
+            }
+            setInterval(time, 1000);
+            </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    </body>
+</html>

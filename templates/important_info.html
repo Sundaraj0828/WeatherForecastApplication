@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Important Info : Weather Forecast</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+        <script src="https://kit.fontawesome.com/js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="../static/css/master.css">
+        <style>
+            body{
+                background: url('../static/image/Weather-Backgrounds.jpg');
+            }
+        </style>
+    </head>
+    <body>   
+        <div class="container-fluid top text-white text-center mb-4">
+            <div class="row ">
+                <div class="col-1 text-start py-3">
+                    <a href="{{url_for('home')}}" class="justify-content-start">
+                        <i class="fa-solid fa-house ms-0 fa-2xl"></i>
+                    </a>
+                </div>
+                <div class="col-9 text-center pt-4 pb-0">
+                    <h4 class="card-title mb-4">Important Info 🌤️</h4>
+                </div>
+                <div class="col-2 text-center py-2">
+                    <h6><i class="fa-solid fa-calendar-day"></i> {{c_date[0]}} </h6>
+                    <h5 ><i class="fa-solid fa-clock"></i> <span id="txt" class=" text-info"></span></h5>
+                </div>
+            </div>
+        </div>     
+        <div class="container">
+            <div class="row">
+                <div class="col-4">
+                    <div class="card dark_t_bg">
+                        <div class="card-header">
+                            <h4 class="card-title">Wind Direction Abbr List</h4>
+                        </div>
+                        <div class="card-body t_box">
+                            <table class="table table-light text-dark table-hover mt-0">
+                                <thead class="sticky-top bg-dark">
+                                    <tr>
+                                        <th scope="col">Direction</th>
+                                        <th scope="col">Abbreviation</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>North</td>
+                                        <td>N</td>
+                                    </tr>
+                                    <tr>
+                                        <td>North-Northeast</td>
+                                        <td>NNE</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Northeast</td>
+                                        <td>NE</td>
+                                    </tr>
+                                    <tr>
+                                        <td>East-Northeast</td>
+                                        <td>ENE</td>
+                                    </tr>
+                                    <tr>
+                                       <td>East</td>
+                                        <td>E</td>
+                                    </tr>
+                                    <tr>
+                                        <td>East-Southeast</td>
+                                        <td>ESE</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Southeast</td>
+                                        <td>SE</td>
+                                    </tr>
+                                    <tr>
+                                        <td>South-Southeast</td>
+                                        <td>SSE</td>
+                                    </tr>
+                                    <tr>
+                                        <td>South</td>
+                                        <td>S</td>
+                                    </tr>
+                                    <tr>
+                                        <td>South-Southwest</td>
+                                        <td>SSW</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Southwest</td>
+                                        <td>SW</td>
+                                    </tr>
+                                    <tr>
+                                        <td>West-Southwest</td>
+                                        <td>WSW</td>
+                                    </tr>
+                                    <tr>
+                                        <td>West</td>
+                                        <td>W</td>
+                                    </tr>
+                                    <tr>
+                                        <td>West-Northwest</td>
+                                        <td>WNW</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Northwest</td>
+                                        <td>NW</td>
+                                    </tr>
+                                    <tr>
+                                        <td>North-Northwest</td>
+                                        <td>NNW</td>
+                                    </tr>
+                
+                
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+        <div class="container-fluid bg-dark text-light mt-4">
+            <div class="row">
+                <div class="col-12">
+                    <footer class="d-flex flex-wrap justify-content-between align-items-center mb-4 mt-4">
+                        <p class="col-md-4 mb-0 text-muted">© 2025 Weather Forecast | 
+                            <a href="{{url_for('important_info')}}" class="text-decoration-none" target="_blank">Important info</a>
+                        </p>
+                    
+                        
+                    
+                        <ul class="nav col-md-4 justify-content-end">
+                        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Developed By :</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Ajay</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Arundhati</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Kareena</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Asish</a></li>
+                        </ul>
+                    </footer>
+                </div>
+            </div>
+        </div>
+        <script>
+            var span = document.getElementById('txt');
+
+            function time() {
+            var d = new Date();
+            var s = d.getSeconds();
+            var m = d.getMinutes();
+            var h = d.getHours();
+            span.textContent = 
+                ("0" + h).substr(-2) + ":" + ("0" + m).substr(-2) + ":" + ("0" + s).substr(-2);
+            }
+
+            setInterval(time, 1000);
+            </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    </body>
+</html>
